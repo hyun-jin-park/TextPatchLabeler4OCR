@@ -110,7 +110,7 @@ class TextRecognitionImagePatchDataset:
             return None
 
         # self._lmdb = lmdb.open(lmdb_path, max_readers=32, lock=False, readahead=False, meminit=False, create=False)
-        self._lmdb = lmdb.open(lmdb_path, create=False, lock=True)
+        self._lmdb = lmdb.open(lmdb_path, create=False, lock=True, map_size=100000000)
         if not self._lmdb:
             print('can not open lmdb from {}'.format(lmdb_path))
             return None
@@ -152,7 +152,7 @@ class TextRecognitionImagePatchDataset:
             img = cv2.resize(image, (self._w_size, self._h_size), self._interpolation)
             return img
 
-    def get_patch_list(self, count, start=0):
+    def get_patch_list(self, count, start=1):
         if self._lmdb is None:
             print('you should open lmdb first before read data ')
             return None
@@ -189,8 +189,8 @@ class TextRecognitionImagePatchDataset:
 
 
 if __name__ == "__main__":
-    dataset = TextRecognitionImagePatchDataset('test_data/lmdb.ld')
-    samples = dataset.get_patch_list(10, 0)
+    dataset = TextRecognitionImagePatchDataset('D:\\\\data\\ocr_lmdb_2\\train')
+    samples = dataset.get_patch_list(10, 1)
     for sample in samples:
         cv2.imshow('{}:{}'.format(sample.index, sample.label), sample.image)
         cv2.waitKey(0)

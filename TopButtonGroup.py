@@ -33,7 +33,7 @@ class TopButtonGroup(QWidget):
                                                           options=QFileDialog.ShowDirsOnly)
         if open_file_info is not None and open_file_info != "":
             self._current_path = open_file_info
-            self._controller.open_lmdb(self._current_path, 0)
+            self._controller.open_lmdb(self._current_path, 1)
         self._position_label.setText(self._controller.get_status_text())
         QApplication.restoreOverrideCursor()
 
