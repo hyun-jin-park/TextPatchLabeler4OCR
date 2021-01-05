@@ -10,7 +10,7 @@ from Controller import Controller
 
 
 class LabelWindow(QWidget):
-    def __init__(self, image_patch_count=9):
+    def __init__(self, image_patch_count=6):
         super(QWidget, self).__init__()
         self._controller = Controller(self)
         self._top_button_group = TopButtonGroup(self._controller)
@@ -42,8 +42,10 @@ class LabelWindow(QWidget):
         main_layout.addLayout(body_layout, stretch=10)
 
         for i in range(0, self._image_patch_count):
-            row = int(i / 3)
-            column = i % 3
+            # row = int(i / 3)
+            row = i
+            # column = i % 3
+            column = 1
             body_layout.addWidget(self._image_patch_view_list[i], row, column, alignment=Qt.AlignTop)
 
         self.setLayout(main_layout)
