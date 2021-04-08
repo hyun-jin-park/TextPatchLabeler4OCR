@@ -13,7 +13,6 @@ class Bookmark:
             with open(self._bookmark_path, 'rb') as f:
                 self._lmdb_path = pickle.load(f)
                 self._lmdb_index = pickle.load(f)
-                self._lmdb_index = 1000000
 
     def update_all(self, path, index):
         self._lmdb_path = path

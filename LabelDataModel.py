@@ -73,7 +73,7 @@ def lmdb_get_image(txn, key):
         return None
 
     io_buf = six.BytesIO(bytes_image)
-    image = cv2.imdecode(np.frombuffer(io_buf.getbuffer(), np.uint8), -1)
+    image = cv2.imdecode(np.frombuffer(io_buf.getbuffer(), np.uint8), cv2.IMREAD_COLOR)
     return image
 
 
@@ -110,7 +110,7 @@ class TextRecognitionImagePatchDataset:
             return None
 
         # self._lmdb = lmdb.open(lmdb_path, max_readers=32, lock=False, readahead=False, meminit=False, create=False)
-        self._lmdb = lmdb.open(lmdb_path, create=False, lock=True, map_size=100000000)
+        self._lmdb = lmdb.open(lmdb_path, create=False, lock=True, map_size=10000000000)
         if not self._lmdb:
             print('can not open lmdb from {}'.format(lmdb_path))
             return None
@@ -152,12 +152,13 @@ class TextRecognitionImagePatchDataset:
             img = cv2.resize(image, (self._w_size, self._h_size), self._interpolation)
             return img
 
-    def get_patch_list(self, count, start=1):
+    def get_patch_list(self, count, start=0):
         if self._lmdb is None:
             print('you should open lmdb first before read data ')
             return None
 
         image_patch_list = []
+        # start = start + 0
         end = min(start + count, self._n_samples)
         with self._lmdb.begin(write=False) as txn:
             for i in range(start, end):
