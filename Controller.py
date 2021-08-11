@@ -75,13 +75,30 @@ class Controller:
 
         self._bookmark.update_all(lmdb_path, self._patch_start_index)
 
+    def go(self, record_num):
+        if self._view is None:
+            print('Controller: next patch')
+            return
+
+        if record_num == 0:
+            self._patch_start_index = 1
+        elif record_num > self._patch_image_count > self._view.image_patch_count:
+            self._patch_start_index = self._patch_image_count - self._view.image_patch_count
+        elif record_num > self._patch_image_count and self._patch_image_count < self._view.image_patch_count:
+            self._patch_start_index = 1
+        else:
+            self._patch_start_index = record_num
+
+        self._view.update_image_patch(self._data.get_patch_list(self._view.image_patch_count, self._patch_start_index))
+        self._bookmark.update_index(self._patch_start_index)
+
     def next_patch(self):
         if self._view is None:
             print('Controller: next patch')
             return
 
         if self._patch_start_index + self._view.image_patch_count > self._patch_image_count:
-            self._patch_start_index = 0
+            self._patch_start_index = 1
         else:
             self._patch_start_index = self._patch_start_index + self._view.image_patch_count
 

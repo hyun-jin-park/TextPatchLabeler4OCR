@@ -110,7 +110,7 @@ class TextRecognitionImagePatchDataset:
             return None
 
         # self._lmdb = lmdb.open(lmdb_path, max_readers=32, lock=False, readahead=False, meminit=False, create=False)
-        self._lmdb = lmdb.open(lmdb_path, create=False, lock=True, map_size=100000000)
+        self._lmdb = lmdb.open(lmdb_path, create=False, lock=True, map_size=int(1e9))
         if not self._lmdb:
             print('can not open lmdb from {}'.format(lmdb_path))
             return None

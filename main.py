@@ -45,7 +45,6 @@ class LabelWindow(QWidget):
             row = int(i / 3)
             column = i % 3
             body_layout.addWidget(self._image_patch_view_list[i], row, column, alignment=Qt.AlignTop)
-
         self.setLayout(main_layout)
 
     def update_image_patch(self, patch_list):
