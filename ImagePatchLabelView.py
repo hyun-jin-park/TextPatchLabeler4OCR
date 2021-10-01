@@ -27,6 +27,7 @@ class ImagePatchView(QWidget):
         super().__init__()
         self._image_patch = QLabel()
         self._resolution = QLabel()
+        self._file_path = QLabel()
         self._text = MyTextEdit(controller, index)
         self._button = QPushButton('delete')
         self._index = index
@@ -34,13 +35,14 @@ class ImagePatchView(QWidget):
         self._controller = controller
         self.init_ui()
 
-    def set(self, index, image, label=None):
+    def set(self, index, image, label=None, file_path=None):
         self._image_patch.setPixmap(QPixmap(cv_image_to_qimage(image)))
         self._index = index
-        self._resolution.setText(str(image.shape))
+        self._resolution.setText(str(image.shape))        
         if label is not None:
             self._text.setText(label)
             self._text.set_index(index)
+            self._file_path.setText(file_path)
 
     def is_updated(self):
         return self._updated
@@ -68,6 +70,7 @@ class ImagePatchView(QWidget):
         layout.addWidget(self._text)
         layout.addWidget(self._button)
         layout.addWidget(self._resolution)
+        layout.addWidget(self._file_path)
         self.setLayout(layout)
 
 

@@ -10,10 +10,11 @@ import math
 
 class ImagePatchData:
 
-    def __init__(self, index, image, label):
+    def __init__(self, index, image, label, file_path):
         self._index = index
         self._image = image
         self._label = label
+        self._file_path = file_path 
 
     @property
     def image(self):
@@ -26,6 +27,10 @@ class ImagePatchData:
     @property
     def index(self):
         return self._index
+
+    @property
+    def file_path(self):
+        return self._file_path
 
 
 def lmdb_put_image(txn, key, image):
@@ -85,10 +90,14 @@ def lmdb_get_image_key(index):
     return 'image-%09d' % index
 
 
+def lmdb_get_path_key(index):
+    return 'path-%09d' % index
+
 def get_record_key(index):
     image_key = lmdb_get_image_key(index)
     label_key = lmdb_get_label_key(index)
-    return image_key, label_key
+    path_key = lmdb_get_path_key(index)
+    return image_key, label_key, path_key 
 
 
 class TextRecognitionImagePatchDataset:
@@ -162,12 +171,13 @@ class TextRecognitionImagePatchDataset:
         end = min(start + count, self._n_samples)
         with self._lmdb.begin(write=False) as txn:
             for i in range(start, end):
-                image_key, label_key = get_record_key(i)
+                image_key, label_key, path_key = get_record_key(i)
                 im = lmdb_get_image(txn, image_key)
                 # im = self.resize_image(im)
                 # im = cv2.resize(im, (128, 32))
                 label = lmdb_get_txt(txn, label_key)
-                patch = ImagePatchData(i, im, label)
+                file_path = lmdb_get_txt(txn, path_key)                 
+                patch = ImagePatchData(i, im, label, file_path)
                 image_patch_list.append(patch)
 
         return image_patch_list

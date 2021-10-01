@@ -51,7 +51,7 @@ class LabelWindow(QWidget):
 
     def update_image_patch(self, patch_list):
         for index, patch in enumerate(patch_list):
-            self._image_patch_view_list[index].set(patch.index, patch.image, patch.label)
+            self._image_patch_view_list[index].set(patch.index, patch.image, patch.label, patch.file_path)
         self._top_button_group.update()
 
 
